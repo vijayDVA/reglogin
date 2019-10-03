@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "789067398687",
+    "firebase_url": "https://reglogin-65ebe.firebaseio.com",
+    "project_id": "reglogin-65ebe",
+    "storage_bucket": "reglogin-65ebe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:789067398687:android:a0fd27d879b6f963c45f2a",
+        "android_client_info": {
+          "package_name": "com.example.reglogin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "789067398687-o7r8v113fv52ak2o3diq69fpp1j0pebm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.reglogin",
+            "certificate_hash": "23c164bfd7308704ffdf87124ae38171bb76a35d"
+          }
+        },
+        {
+          "client_id": "789067398687-5o02q3liik52ooij38hd60q98dkeluvd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4BF7RmLqfPMUVOW84OhYufn0qPrz0q24"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "789067398687-5o02q3liik52ooij38hd60q98dkeluvd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
