@@ -1,8 +1,6 @@
 package com.example.reglogin;
 
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity
     static final int GOOGLE_SIGN_IN = 123;
     FirebaseAuth mAuth;
     Button btn_login, btn_logout ,login;
-    TextView text, forgot;
+    TextView text, forgot , signupplz;
     EditText email_login, pass_login;
     ImageView image;
     ProgressBar progressBar;
@@ -44,6 +44,13 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        forgot = findViewById(R.id.forgot);
+        login = findViewById(R.id.btn_login);
+        email_login = findViewById(R.id.email_login);
+        pass_login = findViewById(R.id.pass_login);
+        signupplz = findViewById(R.id.signupplz);
+
 
         btn_login = findViewById(R.id.login_google);
         btn_logout = findViewById(R.id.logout);
@@ -136,7 +143,7 @@ public class MainActivity extends AppCompatActivity
 
     private void updateUI(FirebaseUser user)
     {
-        if (user != null) {
+        if (user != null && user.isEmailVerified()) {
             String name = user.getDisplayName();
             String email = user.getEmail();
             String photo = String.valueOf(user.getPhotoUrl());
@@ -146,12 +153,22 @@ public class MainActivity extends AppCompatActivity
             text.append(email);
             Picasso.get().load(photo).into(image);
             btn_logout.setVisibility(View.VISIBLE);
+
+            login.setVisibility(View.INVISIBLE);
+            forgot.setVisibility(View.INVISIBLE);
+            email_login.setVisibility(View.INVISIBLE);
+            pass_login.setVisibility(View.INVISIBLE);
             btn_login.setVisibility(View.INVISIBLE);
         } else {
-            text.setText("Firebase Login \n");
+            text.setText("Login\n");
             Picasso.get().load(R.drawable.ic_world).into(image);
             btn_logout.setVisibility(View.INVISIBLE);
             btn_login.setVisibility(View.VISIBLE);
+
+            login.setVisibility(View.VISIBLE);
+            forgot.setVisibility(View.VISIBLE);
+            email_login.setVisibility(View.VISIBLE);
+            pass_login.setVisibility(View.VISIBLE);
 
         }
     }
@@ -162,4 +179,76 @@ public class MainActivity extends AppCompatActivity
                 task -> updateUI(null));
     }
 
+
+
+    public void signup(View view)
+    {
+        Intent intent = new Intent(MainActivity.this, activity.class);
+        startActivity(intent);
+        finish();
+
+    }
+
+    public boolean logintoapp(View view) {
+        String email_logi = email_login.getText().toString().trim();
+        String pass_logi = pass_login.getText().toString().trim();
+
+        if (email_logi.isEmpty())
+        {
+            email_login.setError("field is required");
+            return false;
+        } else if(pass_logi.isEmpty())
+        {
+            pass_login.setError("field is required");
+            return false;
+        }
+        else { mAuth.signInWithEmailAndPassword(email_logi, pass_logi)
+                    .addOnCompleteListener(task ->
+                    {
+                        progressBar.setVisibility(View.VISIBLE);
+                        if (task.isSuccessful()) {
+                            if(mAuth.getCurrentUser().isEmailVerified())
+                            {
+                                Intent intent = new Intent(MainActivity.this, profileactivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                            else {
+                                Toast.makeText(MainActivity.this, "please verify your email address", Toast.LENGTH_LONG).show();
+                                progressBar.setVisibility(View.INVISIBLE);
+
+                            }
+
+                        } else {
+                            Toast.makeText(MainActivity.this, "invalid", Toast.LENGTH_LONG).show();
+                            progressBar.setVisibility(View.INVISIBLE);
+                        }
+                    });
+
+        }
+        return false;
+    }
+
+    public boolean fotgot(View view) {
+        String email_logi = email_login.getText().toString().trim();
+
+        if (email_logi.isEmpty()) {
+            email_login.setError("field is required");
+            return false;
+        }
+        else {
+
+            mAuth.sendPasswordResetEmail(email_login.getText().toString())
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful())
+                            Toast.makeText(MainActivity.this, "Password send to your email", Toast.LENGTH_LONG).show();
+                        else
+                            Toast.makeText(MainActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+
+                    });
+
+
+        }
+        return false;
+    }
 }
